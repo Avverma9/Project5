@@ -101,7 +101,7 @@ const userLogin = async function (req, res) {
 
             let payload = {
                 userId: userData['_id'].toString(),
-                Batch: 'Plutonium',
+                Batch: 'lithium',
                 Project: "Products Management",
                 iat: Date.now(),
                 exp: Date.now()
@@ -146,7 +146,7 @@ const userget = async (req,res)=>{
 }
 const updateUser = async function (req, res) {
     try {
-      let userId = req.params.userId
+      let userId = req.params.userId 
       let data = req.body
       let files = req.files
       let { fname, lname, email, phone, password,address } = data
