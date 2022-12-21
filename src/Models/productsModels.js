@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
   installments: {type:Number},
   deletedAt: {type:Date,default:""}, 
   isDeleted: {type:Boolean, default: false},
-})
+},{timestamps:true})
 
 
 module.exports=mongoose.model('product',productSchema)

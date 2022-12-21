@@ -1,26 +1,22 @@
 const jwt = require("jsonwebtoken")
-const userModel = require("../Models/userModel")
-const validator = require("../validator/validator")
+const userModel = require("../Models/usermodel")
+const validator = require("../validators/validator")
 
 const authentication = async function (req, res, next) {
     try {
         let token = req.headers['authorization'];
 
         if (!token) return res.status(400).send({ status: false, msg: "login is required" })
-
         if (token.startsWith('Bearer')) {
             token = token.slice(7, token.length)
         }
-
-
-        let decodedtoken = jwt.verify(token, "Secret-Key", { ignoreExpiration: true })
-        if (!decodedtoken) return res.status(401).send({ status: false, msg: "token is invalid" })
-        
-
-        let time = Math.floor(Date.now() / 1000)
-        if (decodedtoken.exp < time) {
-            return res.status(401).send({ status: false, message: "token expired, please login again" });
+         try{
+        let decodedtoken = jwt.verify(token, "we-are-from-group10")
+            req.userId=decodedtoken.payload.userId
         }
+         catch(error){
+         return res.status(401).send({ status: false, msg: "token is invalid" })
+         }
 
 
         next()
@@ -34,34 +30,15 @@ const authentication = async function (req, res, next) {
 
 const authorisation = async function (req, res, next) {
     try {
-        let token = req.headers['authorization'];
-        
-        if (token.startsWith('Bearer')) {
-            token = token.slice(7, token.length)
-        }
-
-        let decodedtoken = jwt.verify(token, "Secret-Key", 
-        )
-
-
-        let toBeupdateduserId = req.params.userId
-
-        if (!(validator.isValidObjectId(toBeupdateduserId))) {return res.status(400).send({status: false, message: 'Please provide a valid User Id'})}
-
-
-        let updatinguserId = await userModel.find({ _id: toBeupdateduserId }).select({ _id: 1 })
-        let userId = updatinguserId.map(x => x._id)
-
-
-        let id = decodedtoken.userId
-        if (id != userId) return res.status(403).send({ status: false, msg: "You are not authorised to perform this task" })
-
-
+        const userid=req.pharms.userId
+         if(req.userId==userid)
         next();
+        else
+        return res.status(403).send({ status:false, message:"not authorise"})
     }
     catch (error) {
         console.log(error)
-        return res.status(500).send({ msg: error.message })
+        return res.status(500).send({ status:false, message: error.message })
     }
 }
 

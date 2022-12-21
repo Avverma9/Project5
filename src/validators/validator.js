@@ -25,5 +25,19 @@ const regexPassword = function (password) {
         .test(password)
 }
 
+exports.isValidAvailableSizes = (availablesizes) => {
+    for( i=0 ;i<availablesizes.length; i++){
+      if(!["S", "XS","M","X", "L","XXL", "XL"].includes(availablesizes[i])) return false
+    }
+    return true
+  };
+
+  
+ exports.isValidPrice = (value) => {
+    const regEx =/^[1-9]\d{0,8}(?:\.\d{1,2})?$/
+    const result = regEx.test(value)
+    return result
+  };
+
 
 module.exports={valid,validEmail,validPhone,isValidObjectId,validPincode,regexPassword}

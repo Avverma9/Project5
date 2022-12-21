@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 const validator = require('../validators/validator')
 const aws =require('./aws')
 
-
+/*-------------------------user create api ---------------------------------*/
 const createUser = async function ( req,res){
     try{
         let data = req.body
@@ -78,6 +78,7 @@ catch (error) {
 }
 }
 
+/*-------------------------user login api ---------------------------------*/
 const userLogin = async function (req, res) {
 
     try {
@@ -125,7 +126,7 @@ const userLogin = async function (req, res) {
     }
 }
 
-
+/*-------------------------user Get api ---------------------------------*/
 const userget = async (req,res)=>{
     try{
    const userid=req.params.userId
@@ -134,9 +135,9 @@ const userget = async (req,res)=>{
     return res.status(400).send({status: false, message:"userId is not vaild"})
   }
 
-//    if(userid!=req.userid){
-//     return res.status(403).send({status:false,message:"not authoristed"})
-//    }
+   if(userid!=req.userId){
+    return res.status(400).send({status:false,message:"please provide valid userid"})
+   }
    const getuser = await usermodel.findOne({_id:userid})
    return res.status(200).send({status:true,message: "User profile details",data:getuser})
     }
@@ -144,6 +145,10 @@ const userget = async (req,res)=>{
         return res.status(500).send({status:false,message:err.message})
     }
 }
+
+
+/*-------------------------user Update api---------------------------------*/
+
 const updateUser = async function (req, res) {
     try {
       let userId = req.params.userId 
